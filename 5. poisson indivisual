@@ -1,0 +1,38 @@
+from scipy.stats import poisson
+import matplotlib.pyplot as plt
+import numpy as np
+
+mean = 12
+x = np.arange(0, 30)
+pmf = poisson.pmf(x, mean)
+
+# Probabilities
+prob_5 = poisson.pmf(5, mean)
+prob_le_12 = poisson.cdf(12, mean)
+prob_ge_15 = 1 - poisson.cdf(14, mean)
+prob_10_15 = poisson.cdf(15, mean) - poisson.cdf(9, mean)
+
+# Terminal output
+print(f"Probability of exactly 5 accidents: {prob_5:.4f}")
+print(f"Probability of not more than 12 accidents: {prob_le_12:.4f}")
+print(f"Probability of at least 15 accidents: {prob_ge_15:.4f}")
+print(f"Probability of 10 to 15 accidents: {prob_10_15:.4f}")
+
+# Plot function
+def plot_poisson(condition, color, label):
+    plt.figure(figsize=(8, 4))
+    plt.bar(x, pmf, alpha=0.4, label='Poisson PMF')
+    plt.fill_between(x, 0, pmf, where=condition, color=color, alpha=0.6, label=label)
+    plt.title(label + ' (λ = 12)')
+    plt.xlabel('Number of Accidents')
+    plt.ylabel('Probability')
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+# Individual visualizations
+plot_poisson(x == 5, 'red', 'Exactly 5 Accidents')
+plot_poisson(x <= 12, 'green', 'Not More Than 12 Accidents')
+plot_poisson(x >= 15, 'blue', 'At Least 15 Accidents')
+plot_poisson((x >= 10) & (x <= 15), 'orange', 'Between 10 and 15 Accidents')
