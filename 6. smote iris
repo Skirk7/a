@@ -1,0 +1,38 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from imblearn.over_sampling import SMOTE
+import seaborn as sns
+
+# Load built-in dataset
+df = sns.load_dataset('iris')
+
+# Encode target as binary for SMOTE: 1 = virginica, 0 = others
+df['target'] = (df['species'] == 'virginica').astype(int)
+
+X = df[['sepal_length', 'sepal_width']]
+y = df['target']
+
+# Before SMOTE
+plt.figure(figsize=(7, 5))
+plt.scatter(X[y==0]['sepal_length'], X[y==0]['sepal_width'], label='Non-Virginica', alpha=0.7)
+plt.scatter(X[y==1]['sepal_length'], X[y==1]['sepal_width'], label='Virginica', alpha=0.7)
+plt.title('Class Distribution Before SMOTE')
+plt.xlabel('Sepal Length')
+plt.ylabel('Sepal Width')
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+# Apply SMOTE
+X_res, y_res = SMOTE(random_state=0).fit_resample(X, y)
+
+# After SMOTE
+plt.figure(figsize=(7, 5))
+plt.scatter(X_res[y_res==0]['sepal_length'], X_res[y_res==0]['sepal_width'], label='Non-Virginica', alpha=0.7)
+plt.scatter(X_res[y_res==1]['sepal_length'], X_res[y_res==1]['sepal_width'], label='Virginica', alpha=0.7)
+plt.title('Class Distribution After SMOTE')
+plt.xlabel('Sepal Length')
+plt.ylabel('Sepal Width')
+plt.legend()
+plt.tight_layout()
+plt.show()
