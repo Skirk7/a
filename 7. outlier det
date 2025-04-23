@@ -1,0 +1,37 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.neighbors import LocalOutlierFactor
+
+# Load data
+iris = load_iris()
+X, y = iris.data, iris.target
+
+# Detect outliers
+lof = LocalOutlierFactor(n_neighbors=20, contamination=0.1)
+y_pred = lof.fit_predict(X)
+
+# Plot with color scale for outliers and non-outliers
+plt.figure(figsize=(6, 5))
+plt.scatter(X[:, 0], X[:, 1], c=(y_pred == -1), cmap='coolwarm', label='Outliers', marker='x')
+plt.scatter(X[:, 0], X[:, 1], c=(y_pred != -1), cmap='coolwarm', label='Non-Outliers', marker='o')
+plt.colorbar(label='Outlier Status (True=Outlier, False=Non-Outlier)')
+plt.title('LOF Outlier Detection')
+plt.xlabel('Sepal Length')
+plt.ylabel('Sepal Width')
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+# Remove outliers
+X_clean, y_clean = X[y_pred == 1], y[y_pred == 1]
+
+# Plot after removal (using only one color for cleaned data)
+plt.figure(figsize=(6, 5))
+plt.scatter(X_clean[:, 0], X_clean[:, 1], c='blue', label='Cleaned Data')
+plt.title('After Removing Outliers')
+plt.xlabel('Sepal Length')
+plt.ylabel('Sepal Width')
+plt.legend()
+plt.tight_layout()
+plt.show()
