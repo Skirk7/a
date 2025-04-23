@@ -1,0 +1,25 @@
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+iris = sns.load_dataset('iris')
+
+# Univariate EDA
+fig, axs = plt.subplots(1, 3, figsize=(15, 4))
+for i, col in enumerate(['sepal_length', 'sepal_width', 'petal_length']):
+    sns.histplot(iris[col], kde=True, ax=axs[i], color='skyblue')
+    axs[i].set_title(f'Distribution of {col.replace("_", " ").title()}')
+plt.tight_layout(); plt.show()
+
+# Boxplot for all features
+sns.boxplot(data=iris.drop(columns='species'), palette='Set2')
+plt.title('Boxplot of Features'); plt.show()
+
+# Multivariate EDA
+sns.pairplot(iris, hue='species')
+plt.suptitle('Pairplot of Iris Dataset', y=1.02); plt.show()
+
+sns.scatterplot(data=iris, x='sepal_length', y='sepal_width', hue='species', size='petal_length')
+plt.title('Bubble Chart (Size = Petal Length)'); plt.show()
+
+sns.kdeplot(data=iris, x='sepal_length', y='sepal_width', hue='species', fill=True)
+plt.title('2D KDE: Sepal Length vs Width'); plt.show()
