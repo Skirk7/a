@@ -1,0 +1,38 @@
+from sklearn.datasets import load_wine
+import pandas as pd
+import matplotlib.pyplot as plt
+from imblearn.over_sampling import SMOTE
+
+# Load dataset
+data = load_wine(as_frame=True)
+df = data.frame
+df['target'] = (df['target'] == 2).astype(int)  # Binary: Class 2 vs rest
+
+# Select two features for visual clarity
+X = df[['alcohol', 'malic_acid']]
+y = df['target']
+
+# Plot before SMOTE
+plt.figure(figsize=(7, 5))
+plt.scatter(X[y==0]['alcohol'], X[y==0]['malic_acid'], label='Other Classes', alpha=0.6)
+plt.scatter(X[y==1]['alcohol'], X[y==1]['malic_acid'], label='Class 2', alpha=0.6)
+plt.title('Before SMOTE')
+plt.xlabel('Alcohol')
+plt.ylabel('Malic Acid')
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+# Apply SMOTE
+X_res, y_res = SMOTE(random_state=42).fit_resample(X, y)
+
+# Plot after SMOTE
+plt.figure(figsize=(7, 5))
+plt.scatter(X_res[y_res==0]['alcohol'], X_res[y_res==0]['malic_acid'], label='Other Classes', alpha=0.6)
+plt.scatter(X_res[y_res==1]['alcohol'], X_res[y_res==1]['malic_acid'], label='Class 2 (resampled)', alpha=0.6)
+plt.title('After SMOTE')
+plt.xlabel('Alcohol')
+plt.ylabel('Malic Acid')
+plt.legend()
+plt.tight_layout()
+plt.show()
