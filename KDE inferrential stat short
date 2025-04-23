@@ -1,0 +1,31 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+from sklearn import datasets
+import matplotlib.pyplot as plt
+
+# Load the iris dataset into a DataFrame
+iris = datasets.load_iris()
+iris_df = pd.DataFrame(iris.data, columns=iris.feature_names)
+
+# Calculate mean, mode, median, and skewness for each feature
+stats_df = iris_df.describe().T[['mean', '50%', 'std']]
+stats_df['mode'] = iris_df.mode().iloc[0]
+stats_df['skewness'] = iris_df.skew()
+
+# Rename columns
+stats_df.rename(columns={'50%': 'median'}, inplace=True)
+
+print("Descriptive Statistics for each feature:")
+print(stats_df)
+
+# Plot kernel density estimates for each feature
+plt.figure(figsize=(10, 6))
+for col in iris_df.columns:
+    sns.kdeplot(iris_df[col], label=col, fill=True)
+
+plt.title('Kernel Density Estimates for Iris Features')
+plt.xlabel('Feature Value')
+plt.ylabel('Density')
+plt.legend()
+plt.show()
