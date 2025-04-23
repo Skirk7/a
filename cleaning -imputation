@@ -1,0 +1,24 @@
+# prompt: missing value prediction algorithm (data imputation) show a dataset with missing value then show the result sunig the algorithm
+
+import pandas as pd
+import numpy as np
+
+# Create a sample dataset with missing values
+data = {'A': [1, 2, np.nan, 4, 5],
+        'B': [6, np.nan, 8, 9, 10],
+        'C': [11, 12, 13, np.nan, 15]}
+df = pd.DataFrame(data)
+
+print("Original DataFrame with missing values:")
+print(df)
+
+# Imputation using mean for each column
+df_mean = df.fillna(df.mean())
+print("\nDataFrame after imputation using mean:")
+print(df_mean)
+
+
+# Imputation using median for each column
+df_median = df.fillna(df.median())
+print("\nDataFrame after imputation using median:")
+df_median
